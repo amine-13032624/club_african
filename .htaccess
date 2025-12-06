@@ -1,0 +1,45 @@
+# Club Sportif - Configuration Apache
+# Activez le module mod_rewrite pour utiliser ces règles
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Enlever les barres obliques finales des URLs
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.+)/$  $1 [L,R=301]
+    
+    # Bloquer l'accès direct aux fichiers sensibles (mais laisser PHP fonctionner)
+    RewriteRule ^(config|models|controllers|database)/ - [F,L]
+</IfModule>
+
+# Permettre l'accès à tous les fichiers PHP
+<FilesMatch "\.php$">
+    Allow from all
+</FilesMatch>
+
+# Bloquer l'accès aux fichiers cachés
+<FilesMatch "^\.">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Compression Gzip
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE application/javascript
+</IfModule>
+
+# Cache Control
+<FilesMatch "\.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>
+
+<FilesMatch "\.(html|htm|php)$">
+    Header set Cache-Control "max-age=0, public, must-revalidate"
+</FilesMatch>
+
+# Empêcher le listage des répertoires
+Options -Indexes

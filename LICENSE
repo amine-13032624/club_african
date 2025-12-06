@@ -1,0 +1,165 @@
+<<<<<<< HEAD
+# License - Club Sportif
+
+## Proprietary License
+
+**Club Sportif Management System**  
+Version 1.0.0
+
+---
+
+## Copyright
+
+© 2024 Club Sportif. Tous droits réservés.
+
+---
+
+## Conditions d'Utilisation
+
+Ce logiciel est la propriété exclusive de Club Sportif. L'utilisation, la modification, la distribution ou la reproduction de ce logiciel sans permission écrite explicite est strictement interdite.
+
+### Ce que vous pouvez faire:
+- ✓ Utiliser le logiciel pour la gestion de votre club
+- ✓ Lire et comprendre le code source
+- ✓ Signaler les bugs et problèmes
+- ✓ Faire des suggestions d'amélioration
+- ✓ Utiliser à titre personnel ou commercial
+
+### Ce que vous NE pouvez PAS faire:
+- ✗ Modifier le code sans permission
+- ✗ Distribuer le logiciel
+- ✗ Vendre le logiciel
+- ✗ Utiliser le code dans d'autres projets
+- ✗ Supprimer les avis de copyright
+- ✗ Créer des versions dérivées
+
+---
+
+## Limitations de Responsabilité
+
+CE LOGICIEL EST FOURNI "TEL QUEL" SANS GARANTIE D'AUCUNE SORTE, 
+EXPLICITE OU IMPLICITE, Y COMPRIS MAIS NON LIMITÉ AUX GARANTIES 
+DE QUALITÉ MARCHANDE, D'ADÉQUATION À UN USAGE PARTICULIER ET 
+D'ABSENCE DE CONTREFAÇON.
+
+EN AUCUN CAS, LES AUTEURS OU TITULAIRES DE DROITS NE SERONT 
+RESPONSABLES DE TOUT DOMMAGE INDIRECT, ACCIDENTEL, SPÉCIAL, 
+EXEMPLAIRE OU CONSÉCUTIF (Y COMPRIS MAIS NON LIMITÉ À L'ACQUISITION 
+DE BIENS OU DE SERVICES DE SUBSTITUTION, LA PERTE D'UTILISATION, 
+LES DONNÉES OU LES BÉNÉFICES, OU L'INTERRUPTION D'ACTIVITÉ).
+
+---
+
+## Conditions d'Accès
+
+Par l'utilisation de ce logiciel, vous acceptez les conditions suivantes:
+
+1. **Authentification**: Vous êtes autorisé à accéder via les identifiants fournis
+2. **Respect des données**: Vous devez respecter la confidentialité des données
+3. **Sécurité**: Vous êtes responsable de la sécurité de votre installation
+4. **Conformité légale**: Vous devez respecter toutes les lois applicables
+5. **Respect de la propriété intellectuelle**: Le code est protégé par le droit d'auteur
+
+---
+
+## Utilisation Commerciale
+
+Pour une utilisation commerciale ou une distribution, une licence commerciale doit être obtenue auprès de:
+
+**Club Sportif**  
+Email: admin@clubsportif.com  
+Adresse: 123 Rue du Sport, 75000 Paris, France
+
+Les tarifs de licence commerciale seront fournis sur demande.
+
+---
+
+## Propriété Intellectuelle
+
+Le logiciel Club Sportif, y compris tout code source, design, graphiques, 
+icônes et documentation, est la propriété intellectuelle protégée de Club Sportif.
+
+Tous les droits d'auteur, marques déposées et autres droits de propriété 
+intellectuelle sont conservés.
+
+---
+
+## Support et Maintenance
+
+Le support technique et la maintenance sont fournis à la discrétion de Club Sportif. 
+Aucune garantie n'est donnée quant à la disponibilité continue du support.
+
+---
+
+## Modifications
+
+Club Sportif se réserve le droit de modifier ces conditions à tout moment. 
+L'utilisation continue du logiciel après les modifications signifie votre acceptation 
+des nouvelles conditions.
+
+---
+
+## Résiliation
+
+Club Sportif peut résilier votre accès au logiciel à tout moment et pour quelque raison 
+que ce soit, sans préavis.
+
+---
+
+## Loi Applicable
+
+Cette licence est régie par les lois de la France. Toute action en justice découlant 
+de cette licence doit être intentée exclusivement dans les tribunaux français.
+
+---
+
+## Contact
+
+Pour les questions concernant cette licence:
+
+**Club Sportif**  
+Email: admin@clubsportif.com  
+Téléphone: 01 23 45 67 89  
+Web: http://localhost/club-sportif/
+
+---
+
+## Acceptance
+
+En téléchargeant, installant ou utilisant ce logiciel, vous acceptez 
+pleinement et inconditionnellement les termes et conditions de cette licence.
+
+Si vous n'acceptez pas ces termes, vous ne devez pas utiliser ce logiciel.
+
+---
+
+**Dernière mise à jour**: 2024-01-XX  
+**Version**: 1.0.0  
+**Statut**: Actif
+
+---
+
+© 2024 Club Sportif. Tous droits réservés.
+=======
+MIT License
+
+Copyright (c) 2025 Amen Allah 
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+>>>>>>> ddb5270dba721bae8e35aa4bdc2c9dff5ac31bb6

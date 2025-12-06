@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Cercle extérieur noir -->
+  <circle cx="100" cy="100" r="95" fill="none" stroke="#000" stroke-width="3"/>
+  
+  <!-- Cercle rouge intérieur -->
+  <circle cx="100" cy="100" r="85" fill="#DC143C"/>
+  
+  <!-- Bande jaune horizontale -->
+  <rect x="20" y="85" width="160" height="30" fill="#FFD700"/>
+  
+  <!-- Étoile rouge au centre -->
+  <polygon points="100,40 115,85 165,85 130,120 145,165 100,130 55,165 70,120 35,85 85,85" 
+           fill="#DC143C" stroke="#000" stroke-width="1"/>
+  
+  <!-- Texte en haut -->
+  <text x="100" y="25" font-family="Arial" font-size="10" font-weight="bold" 
+        text-anchor="middle" fill="#FFD700">ESPÉRANCE</text>
+  
+  <!-- Texte en bas -->
+  <text x="100" y="190" font-family="Arial" font-size="8" font-weight="bold" 
+        text-anchor="middle" fill="#000">SPORTIVE DE TUNIS</text>
+  
+  <!-- Année de fondation -->
+  <text x="100" y="155" font-family="Arial" font-size="7" font-weight="bold" 
+        text-anchor="middle" fill="#000">1919</text>
+</svg>
