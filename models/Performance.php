@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Performance {
     private $conn;
@@ -102,5 +102,41 @@ class Performance {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Enregistrer une performance (Diagram method)
+    public function enregistrer($id_athlete, $data) {
+        $query = "INSERT INTO " . $this->table . "
+                  (id_athlete, id_competition, type_performance, valeur, unite, date_performance, commentaire)
+                  VALUES (?, ?, ?, ?, ?, NOW(), ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        return $stmt->execute([
+            $id_athlete,
+            $data['id_competition'] ?? null,
+            $data['type'] ?? 'standard',
+            $data['valeur'] ?? 0,
+            $data['unite'] ?? '',
+            $data['commentaire'] ?? ''
+        ]);
+    }
+
+    // Analyser les performances (Diagram method)
+    public function analyser($id_athlete) {
+        $query = "SELECT 
+                    COUNT(*) as total_performances,
+                    AVG(valeur) as moyenne,
+                    MAX(valeur) as meilleure,
+                    MIN(valeur) as pire,
+                    STDDEV(valeur) as ecart_type,
+                    DATE_FORMAT(MAX(date_performance), '%Y-%m-%d') as derniere_date
+                  FROM " . $this->table . "
+                  WHERE id_athlete = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$id_athlete]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
 ?>
+

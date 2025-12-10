@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Competition {
     private $conn;
@@ -100,5 +100,64 @@ class Competition {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Organiser un tournoi (Diagram method)
+    public function organiserTournoi($tournoi_data) {
+        $query = "INSERT INTO " . $this->table . "
+                  (nom, date_competition, lieu, type, niveau, nombre_participants)
+                  VALUES (?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        return $stmt->execute([
+            $tournoi_data['nom'] ?? '',
+            $tournoi_data['date'] ?? date('Y-m-d'),
+            $tournoi_data['lieu'] ?? '',
+            $tournoi_data['type'] ?? 'tournoi',
+            $tournoi_data['niveau'] ?? 'amateur',
+            $tournoi_data['nombre_participants'] ?? 0
+        ]);
+    }
+
+    // Inscrire un participant (Diagram method)
+    public function inscrireParticipant($id_competition, $id_athlete) {
+        $query = "INSERT INTO participation (id_competition, id_athlete, date_inscription, statut)
+                  VALUES (?, ?, NOW(), 'inscrit')
+                  ON DUPLICATE KEY UPDATE statut = 'inscrit'";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        if ($stmt->execute([$id_competition, $id_athlete])) {
+            // Mettre à jour le nombre de participants
+            return $this->updateNombreParticipants($id_competition);
+        }
+        
+        return false;
+    }
+
+    // Mettre à jour le nombre de participants
+    private function updateNombreParticipants($id_competition) {
+        $query = "UPDATE " . $this->table . " c
+                  SET nombre_participants = (SELECT COUNT(*) FROM participation WHERE id_competition = c.id_competition)
+                  WHERE id_competition = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([$id_competition]);
+    }
+
+    // Récupérer les participants d'une compétition
+    public function getParticipants($id_competition) {
+        $query = "SELECT p.*, m.nom, m.prenom, a.numeroLicence
+                  FROM participation p
+                  INNER JOIN athlete a ON p.id_athlete = a.id_athlete
+                  INNER JOIN membre m ON a.id_membre = m.id_membre
+                  WHERE p.id_competition = ?
+                  ORDER BY m.nom, m.prenom";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$id_competition]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
+

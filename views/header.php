@@ -17,6 +17,9 @@ if (!isset($_SESSION)) {
             <li class="nav-item">
                 <a href="index.php?page=membres" class="nav-link">Membres</a>
             </li>
+            <li class="nav-item">
+                <a href="index.php?page=equipes" class="nav-link">Équipes</a>
+            </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link">Entraînements</a>
                 <div class="dropdown-menu">

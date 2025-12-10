@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Abonnement {
     private $conn;
@@ -95,6 +95,43 @@ class Abonnement {
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Renouveler un abonnement (Diagram method)
+    public function renouveler($id_abonnement, $nombre_mois = 1) {
+        $query = "UPDATE " . $this->table . "
+                  SET date_fin = DATE_ADD(date_fin, INTERVAL ? MONTH),
+                      statut = 'actif'
+                  WHERE id_abonnement = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([$nombre_mois, $id_abonnement]);
+    }
+
+    // Vérifier la validité d'un abonnement (Diagram method)
+    public function verifierValidite($id_abonnement = null) {
+        $id = $id_abonnement ?? $this->id_abonnement;
+        
+        $query = "SELECT * FROM " . $this->table . " WHERE id_abonnement = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$id]);
+        $abonnement = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$abonnement) {
+            return false;
+        }
+        
+        // Vérifie si la date de fin est dans le futur et statut est actif
+        $is_valid = ($abonnement['statut'] === 'actif' && strtotime($abonnement['date_fin']) > time());
+        
+        // Mise à jour du statut si nécessaire
+        if (!$is_valid && $abonnement['statut'] === 'actif') {
+            $query_update = "UPDATE " . $this->table . " SET statut = 'expire' WHERE id_abonnement = ?";
+            $stmt_update = $this->conn->prepare($query_update);
+            $stmt_update->execute([$id]);
+        }
+        
+        return $is_valid;
     }
 }
 ?>

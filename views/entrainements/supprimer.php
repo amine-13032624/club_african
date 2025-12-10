@@ -3,7 +3,7 @@
 $page_title = 'Supprimer un Entraînement';
 
 if (!isset($_GET['id'])) {
-    header('Location: planning.php');
+    header('Location: index.php?page=entrainements&action=planning');
     exit();
 }
 
@@ -13,15 +13,15 @@ $entrainement = $controller->getById($id);
 
 if (!$entrainement) {
     $_SESSION['error'] = 'Entraînement non trouvé';
-    header('Location: planning.php');
+    header('Location: index.php?page=entrainements&action=planning');
     exit();
 }
 
 // Traiter la suppression
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
-    if ($controller->supprimer($id)) {
+    if ($controller->supprimer($_GET['id'])) {
         $_SESSION['success'] = 'Entraînement supprimé avec succès!';
-        header('Location: planning.php');
+        header('Location: index.php?page=entrainements&action=planning');
         exit();
     } else {
         $_SESSION['error'] = 'Erreur lors de la suppression';

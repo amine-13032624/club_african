@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Entrainement {
     private $conn;
@@ -116,6 +116,41 @@ class Entrainement {
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['count'];
+    }
+
+    // Envoyer un rappel aux participants (Diagram method)
+    public function envoyerRappel($id_entrainement = null) {
+        $id = $id_entrainement ?? $this->id_entrainement;
+        
+        $query = "SELECT e.*, eq.nom as nom_equipe, et.email as email_entraineur
+                  FROM " . $this->table . " e
+                  LEFT JOIN equipe eq ON e.id_equipe = eq.id_equipe
+                  LEFT JOIN entraineur et ON e.id_entraineur = et.id_entraineur
+                  WHERE e.id_entrainement = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$id]);
+        $entrainement = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$entrainement) {
+            return false;
+        }
+        
+        // Récupérer les emails des athlètes de l'équipe
+        $query_athletes = "SELECT m.email FROM athlete a
+                          INNER JOIN membre m ON a.id_membre = m.id_membre
+                          WHERE a.id_equipe = ?";
+        
+        $stmt_athletes = $this->conn->prepare($query_athletes);
+        $stmt_athletes->execute([$entrainement['id_equipe']]);
+        $athletes = $stmt_athletes->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Créer un enregistrement de rappel
+        $query_reminder = "INSERT INTO reminders (id_entrainement, email_sent, date_sent, statut)
+                          VALUES (?, 1, NOW(), 'envoyé')";
+        $stmt_reminder = $this->conn->prepare($query_reminder);
+        
+        return $stmt_reminder->execute([$id]);
     }
 }
 ?>

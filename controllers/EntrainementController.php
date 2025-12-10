@@ -1,7 +1,7 @@
 <?php
-require_once 'config/database.php';
-require_once 'models/Entrainement.php';
-require_once 'models/Equipe.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Entrainement.php';
+require_once __DIR__ . '/../models/Equipe.php';
 
 class EntrainementController {
     private $db;
@@ -108,7 +108,7 @@ class EntrainementController {
 
     // Récupérer tous les entraîneurs
     public function getTousEntraineurs() {
-        $query = "SELECT m.*, en.specialite 
+        $query = "SELECT en.id_entraineur, m.nom, m.prenom, en.specialite 
                   FROM entraineur en
                   INNER JOIN membre m ON en.id_membre = m.id_membre
                   ORDER BY m.nom, m.prenom";

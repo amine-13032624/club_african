@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once __DIR__ . '/../config/database.php';
 
 class Paiement {
     private $conn;
@@ -101,5 +101,83 @@ class Paiement {
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['total'] ?? 0;
     }
+
+    // Effectuer un paiement en ligne (Diagram method)
+    public function effectuerPaiementEnLigne($paiement_data) {
+        // Simuler le traitement du paiement en ligne
+        $query = "INSERT INTO " . $this->table . "
+                  (id_membre, montant, date, methode_paiement, statut, description)
+                  VALUES (?, ?, NOW(), ?, ?, ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        $result = $stmt->execute([
+            $paiement_data['id_membre'] ?? $this->id_membre,
+            $paiement_data['montant'] ?? $this->montant,
+            $paiement_data['methode'] ?? 'carte_bancaire',
+            'en attente',
+            $paiement_data['description'] ?? ''
+        ]);
+        
+        if ($result) {
+            $id_paiement = $this->conn->lastInsertId();
+            
+            // Simuler la validation du paiement en ligne
+            // En production, cela appellerait une API de passerelle de paiement
+            $this->validerPaiement($id_paiement);
+            
+            return true;
+        }
+        
+        return false;
+    }
+
+    // Générer un reçu (Diagram method)
+    public function genererRecu($id_paiement = null) {
+        $id = $id_paiement ?? $this->id_paiement;
+        
+        $query = "SELECT p.*, m.nom, m.prenom, m.email
+                  FROM " . $this->table . " p
+                  INNER JOIN membre m ON p.id_membre = m.id_membre
+                  WHERE p.id_paiement = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$id]);
+        $paiement = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$paiement) {
+            return false;
+        }
+        
+        // Générer un numéro de reçu unique
+        $numero_recu = 'REC-' . $id . '-' . date('YmdHis');
+        
+        // Créer un enregistrement de reçu
+        $query_recu = "INSERT INTO recus (id_paiement, numero_recu, date_emission, statut)
+                      VALUES (?, ?, NOW(), 'émis')";
+        
+        $stmt_recu = $this->conn->prepare($query_recu);
+        
+        if ($stmt_recu->execute([$id, $numero_recu])) {
+            return [
+                'numero_recu' => $numero_recu,
+                'paiement' => $paiement,
+                'date_emission' => date('Y-m-d H:i:s')
+            ];
+        }
+        
+        return false;
+    }
+
+    // Valider un paiement (méthode interne)
+    private function validerPaiement($id_paiement) {
+        $query = "UPDATE " . $this->table . "
+                  SET statut = 'confirmé'
+                  WHERE id_paiement = ?";
+        
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([$id_paiement]);
+    }
 }
 ?>
+

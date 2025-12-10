@@ -67,5 +67,30 @@ class Staff extends Membre {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    // Générer un rapport (Diagram method)
+    public function genererRapport($rapport_data) {
+        $query = "INSERT INTO rapports (id_staff, titre, description, date_creation, contenu)
+                  VALUES (?, ?, ?, NOW(), ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        return $stmt->execute([
+            $this->id_membre,
+            $rapport_data['titre'] ?? '',
+            $rapport_data['description'] ?? '',
+            $rapport_data['contenu'] ?? ''
+        ]);
+    }
+
+    // Récupérer tous les rapports générés par ce staff
+    public function getRapports() {
+        $query = "SELECT * FROM rapports 
+                  WHERE id_staff = ? 
+                  ORDER BY date_creation DESC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute([$this->id_membre]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>

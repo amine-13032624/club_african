@@ -1,10 +1,10 @@
 <?php
-require_once 'config/database.php';
-require_once 'models/Membre.php';
-require_once 'models/Athelete.php';
-require_once 'models/Entrainement.php';
-require_once 'models/Paiement.php';
-require_once 'models/Abonnement.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Membre.php';
+require_once __DIR__ . '/../models/Athlete.php';
+require_once __DIR__ . '/../models/Entrainement.php';
+require_once __DIR__ . '/../models/Paiement.php';
+require_once __DIR__ . '/../models/Abonnement.php';
 
 class DashboardController {
     private $db;

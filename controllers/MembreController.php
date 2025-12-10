@@ -1,8 +1,8 @@
 <?php
-require_once 'config/database.php';
-require_once 'models/Athelete.php';
-require_once 'models/Entraineur.php';
-require_once 'models/Staff.php';
+require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/../models/Athelete.php';
+require_once __DIR__ . '/../models/Entraineur.php';
+require_once __DIR__ . '/../models/Staff.php';
 
 class MembreController {
     private $db;

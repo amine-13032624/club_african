@@ -5,6 +5,7 @@ require_once 'controllers/DashboardController.php';
 require_once 'controllers/MembreController.php';
 require_once 'controllers/EntrainementController.php';
 require_once 'controllers/PaiementController.php';
+require_once 'controllers/EquipeController.php';
 
 // Vérification de l'authentification
 if (!isset($_SESSION['user_id'])) {
@@ -17,6 +18,7 @@ $dashboardController = new DashboardController();
 $membreController = new MembreController();
 $entrainementController = new EntrainementController();
 $paiementController = new PaiementController();
+$equipeController = new EquipeController();
 
 // Déterminer la page à afficher
 $page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
@@ -94,6 +96,25 @@ $page_title = 'Club Sportif';
                         break;
                     default:
                         require_once 'views/paiements/liste.php';
+                }
+                break;
+            
+            case 'equipes':
+                switch ($action) {
+                    case 'ajouter':
+                        require_once 'views/equipes/ajouter.php';
+                        break;
+                    case 'editer':
+                        require_once 'views/equipes/editer.php';
+                        break;
+                    case 'profil':
+                        require_once 'views/equipes/profil.php';
+                        break;
+                    case 'supprimer':
+                        require_once 'views/equipes/supprimer.php';
+                        break;
+                    default:
+                        require_once 'views/equipes/liste.php';
                 }
                 break;
             

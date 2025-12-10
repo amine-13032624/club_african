@@ -3,7 +3,7 @@
 $page_title = 'Modifier un Entraînement';
 
 if (!isset($_GET['id'])) {
-    header('Location: planning.php');
+    header('Location: index.php?page=entrainements&action=planning');
     exit();
 }
 
@@ -15,7 +15,7 @@ $entraineurs = $controller->getTousEntraineurs();
 
 if (!$entrainement) {
     $_SESSION['error'] = 'Entraînement non trouvé';
-    header('Location: planning.php');
+    header('Location: index.php?page=entrainements&action=planning');
     exit();
 }
 
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($controller->modifier($id, $data)) {
         $_SESSION['success'] = 'Entraînement modifié avec succès!';
-        header('Location: planning.php');
+        header('Location: index.php?page=entrainements&action=planning');
         exit();
     } else {
         $error = 'Erreur lors de la modification';

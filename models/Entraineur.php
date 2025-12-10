@@ -81,5 +81,42 @@ class Entraineur extends Membre {
         $stmt->execute([$id_equipe]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Planifier un entraînement (Diagram method)
+    public function planifierEntrainement($data) {
+        $query = "INSERT INTO entrainement (id_entraineur, id_equipe, titre, description, date_entrainement, heure_debut, heure_fin, lieu, type, niveau)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        return $stmt->execute([
+            $this->id_membre,
+            $data['id_equipe'] ?? $this->id_equipe,
+            $data['titre'] ?? '',
+            $data['description'] ?? '',
+            $data['date'] ?? date('Y-m-d'),
+            $data['heure_debut'] ?? '',
+            $data['heure_fin'] ?? '',
+            $data['lieu'] ?? '',
+            $data['type'] ?? 'standard',
+            $data['niveau'] ?? $this->niveau
+        ]);
+    }
+
+    // Évaluer un athlète (Diagram method)
+    public function evaluerAthlete($id_athlete, $evaluation_data) {
+        $query = "INSERT INTO performance (id_athlete, id_entraineur, date_performance, type, valeur, commentaire)
+                  VALUES (?, ?, NOW(), ?, ?, ?)";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        return $stmt->execute([
+            $id_athlete,
+            $this->id_membre,
+            $evaluation_data['type'] ?? 'evaluation',
+            $evaluation_data['valeur'] ?? 0,
+            $evaluation_data['commentaire'] ?? ''
+        ]);
+    }
 }
 ?>

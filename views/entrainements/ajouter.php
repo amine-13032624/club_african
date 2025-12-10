@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         if ($controller->ajouter($data)) {
             $_SESSION['success'] = 'Entraînement ajouté avec succès!';
-            header('Location: planning.php');
+            header('Location: index.php?page=entrainements&action=planning');
             exit();
         } else {
             $error = 'Erreur lors de l\'ajout de l\'entraînement';
