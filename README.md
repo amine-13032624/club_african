@@ -1,263 +1,107 @@
-<<<<<<< HEAD
-# Club Sportif - Système de Gestion
+# Club Sportif — Gestion de club
 
-Une plateforme web complète pour la gestion d'un club sportif, permettant de gérer les membres, les entraînements, les paiements et les statistiques.
+Application PHP pour gérer un club sportif: membres (athlètes, entraîneurs, staff), équipes, entraînements, paiements et statistiques.
 
-## Fonctionnalités
+## Prérequis
 
-### Gestion des Membres
-- ✅ Ajouter/modifier/supprimer des membres
-- ✅ Gérer les athlètes, entraîneurs et staff
-- ✅ Visualiser les profils détaillés
-- ✅ Catégories et niveaux de compétence
+- `PHP 8.1+` (fonctionne aussi sur `PHP 8.2`)
+- `MySQL/MariaDB` (XAMPP recommandé)
+- `Apache` ou serveur PHP intégré
 
-### Gestion des Entraînements
-- ✅ Planifier les entraînements
-- ✅ Assigner les entraîneurs et équipes
-- ✅ Gérer le calendrier des séances
-- ✅ Types d'entraînement (collectif, individuel, groupe)
+## Installation rapide
 
-### Gestion des Paiements
-- ✅ Enregistrer les paiements des membres
-- ✅ Suivre l'état des cotisations
-- ✅ Gérer les méthodes de paiement
-- ✅ Statistiques des paiements
+- Cloner le projet dans `c:\xampp\htdocs\club_african`
+- Créer la base `club_sportif` et importer `database/club_sportif.sql`
+- Démarrer `Apache` et `MySQL` via XAMPP
+- Ouvrir `http://localhost/club_african/public/login.php`
 
-### Tableau de Bord
-- ✅ Vue d'ensemble des statistiques
-- ✅ Graphiques et métriques
-- ✅ Alertes et notifications
-- ✅ Prévisions et tendances
+Identifiants de démo:
+- Email: `admin@clubsportif.com`
+- Mot de passe: `admin123`
 
-## Installation
+## Démarrage (2 options)
 
-### Prérequis
-- PHP 7.4+
-- MySQL 5.7+
-- Apache (XAMPP)
+- Apache (XAMPP): placer le dossier dans `htdocs` et accéder à `http://localhost/club_african/`
+- Serveur PHP intégré: `php -S localhost:8000 -t .` puis `http://localhost:8000/public/login.php`
 
-### Étapes d'installation
-
-1. **Cloner/télécharger le projet**
-```bash
-cd c:\xampp\htdocs\club-sportif
-```
-
-2. **Configurer la base de données**
-   - Modifier `config/database.php` si nécessaire
-   - Importer le schéma: `database/club_sportif.sql`
-
-3. **Démarrer XAMPP**
-   - Apache
-   - MySQL
-
-4. **Accéder l'application**
-   - URL: `http://localhost/club-sportif/`
-
-## Configuration
-
-### Fichier config/database.php
-```php
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'club_sportif');
-```
-
-### Identifiants par défaut
-- **Email**: admin@clubsportif.com
-- **Mot de passe**: admin123
-
-> ⚠️ À modifier en production!
-
-## Structure du Projet
+## Structure
 
 ```
-club-sportif/
-├── config/
-│   └── database.php          # Configuration de la base de données
-├── controllers/
-│   ├── DashboardController.php
-│   ├── MembreController.php
-│   ├── EntrainementController.php
-│   └── PaiementController.php
-├── models/
-│   ├── Membre.php            # Classe abstraite
-│   ├── Athelete.php
-│   ├── Entraineur.php
-│   ├── Staff.php
-│   ├── Entrainement.php
-│   ├── Paiement.php
-│   ├── Equipe.php
-│   ├── Competition.php
-│   ├── Performance.php
-│   ├── Club.php
-│   ├── Abonnement.php
-│   ├── Sponsor.php
-│   └── Contrat.php
-├── views/
-│   ├── header.php
-│   ├── footer.php
-│   ├── membres/
-│   │   ├── liste.php
-│   │   ├── ajouter.php
-│   │   ├── editer.php
-│   │   ├── supprimer.php
-│   │   └── profil.php
-│   ├── entrainements/
-│   │   ├── planning.php
-│   │   ├── ajouter.php
-│   │   ├── editer.php
-│   │   └── supprimer.php
-│   ├── paiements/
-│   │   ├── liste.php
-│   │   ├── ajouter.php
-│   │   ├── editer.php
-│   │   └── supprimer.php
-│   └── statistiques/
-│       └── dashboard.php
-├── css/
-│   └── style.css            # Feuille de style responsive
-├── js/
-│   └── script.js            # JavaScript utilitaire
+club_african/
+├── api/                      API JSON (POST)
+│   ├── membre/               ajouter|modifier|supprimer
+│   ├── equipe/               ajouter|modifier|supprimer
+│   ├── entrainement/         ajouter|modifier|supprimer
+│   ├── paiement/             ajouter|modifier|supprimer
+│   ├── competition/          ajouter|modifier|supprimer
+│   └── ...                   autres ressources
 ├── database/
-│   └── club_sportif.sql     # Schéma de la base de données
-├── index.php                # Page d'accueil
-└── login.php                # Page de connexion
+│   └── club_sportif.sql      schéma complet
+├── public/                   interface utilisateur
+│   ├── css/style.css         styles
+│   ├── js/script.js          scripts
+│   ├── images/               assets
+│   ├── views/                pages incluses par `public/index.php`
+│   │   ├── membres/          liste, ajouter, editer, supprimer, profil
+│   │   ├── entrainements/    planning, ajouter, editer, supprimer
+│   │   ├── paiements/        liste, ajouter, editer, supprimer
+│   │   ├── equipes/          liste, ajouter, editer, profil, supprimer
+│   │   ├── statistiques/     dashboard
+│   │   ├── header.php        navigation
+│   │   └── footer.php        pied de page
+│   ├── index.php             routeur des vues
+│   ├── login.php             authentification (démo)
+│   ├── logout.php            déconnexion
+│   └── .htaccess             réécriture URL (Apache)
+├── src/
+│   ├── config/database.php   connexion PDO
+│   ├── controllers/          logique applicative
+│   │   ├── DashboardController.php
+│   │   ├── MembreController.php
+│   │   ├── EntrainementController.php
+│   │   ├── PaiementController.php
+│   │   └── EquipeController.php
+│   └── models/               modèles de données
+│       ├── Membre.php (abstrait)
+│       ├── Athlete.php | Entraineur.php | Staff.php
+│       ├── Equipe.php | Entrainement.php | Paiement.php
+│       ├── Competition.php | Performance.php
+│       ├── Sponsor.php | Contrat.php | Abonnement.php | Club.php
+├── .htaccess                 sécurité/cache (Apache)
+├── index.php                 charge `public/index.php`
+├── .gitignore
+└── LICENSE
 ```
 
-## Pages et Fonctionnalités
+## Configuration base de données
 
-### Authentification
-- `login.php` - Formulaire de connexion
-- `logout.php` - Déconnexion
+`src/config/database.php` utilise `PDO`:
 
-### Accueil
-- `index.php` - Tableau de bord principal
+- Hôte: `127.0.0.1`
+- Base: `club_sportif`
+- Utilisateur: `root`
+- Mot de passe: vide par défaut sous XAMPP
 
-### Gestion des Membres
-- `views/membres/liste.php` - Liste complète des membres
-- `views/membres/ajouter.php` - Créer un nouveau membre (athlète/entraîneur/staff)
-- `views/membres/editer.php` - Modifier un membre
-- `views/membres/supprimer.php` - Supprimer un membre
-- `views/membres/profil.php` - Voir le profil complet
+Adapter ces valeurs selon votre environnement.
 
-### Gestion des Entraînements
-- `views/entrainements/planning.php` - Vue du planning
-- `views/entrainements/ajouter.php` - Créer un entraînement
-- `views/entrainements/editer.php` - Modifier un entraînement
-- `views/entrainements/supprimer.php` - Supprimer un entraînement
+## Utilisation de l’API
 
-### Gestion des Paiements
-- `views/paiements/liste.php` - Liste des paiements avec statistiques
-- `views/paiements/ajouter.php` - Enregistrer un paiement
-- `views/paiements/editer.php` - Modifier un paiement
-- `views/paiements/supprimer.php` - Supprimer un paiement
-
-### Statistiques
-- `views/statistiques/dashboard.php` - Analyses et rapports
-
-## Modèles de Données
-
-### Classe Membre (abstraite)
-- Propriétés de base: nom, prénom, email, téléphone, date de naissance
-- Catégories: Athlète, Entraîneur, Staff
-- Héritées: Athelete, Entraineur, Staff
-
-### Athlète
-- Numéro de licence
-- Équipe assignée
-- Taille, poids, position
-- Historique de performances
-
-### Entraîneur
-- Spécialité
-- Diplôme
-- Années d'expérience
-- Équipe assignée
-
-### Staff
-- Fonction (directeur, médecin, kinésithérapeute, etc.)
-- Département
-- Date d'embauche
-
-### Entraînement
-- Date et heure
-- Type (collectif, individuel, groupe)
-- Niveau (débutant, intermédiaire, avancé)
-- Lieu
-- Entraîneur assigné
-- Équipe(s) concernées
-
-### Paiement
-- Membre
-- Montant
-- Méthode (espèces, chèque, carte, virement)
-- Statut (en attente, confirmé, annulé)
-- Date
-
-## API et Contrôleurs
-
-### DashboardController
-```php
-getDashboardStats()              // Récupère les statistiques clés
-getStatistiquesCategories()      // Stats par catégorie
-getStatistiquesNiveaux()         // Stats par niveau
-getComingCompetitions()          // Compétitions à venir
+- Format: `POST` JSON vers `api/<ressource>/<action>.php`
+- Exemple ajout équipe:
+```
+POST http://localhost/club_african/api/equipe/ajouter.php
+{
+  "nom": "Aigles",
+  "sport": "Football",
+  "discipline": "Seniors",
+  "nombre_joueurs": 20
+}
 ```
 
-### MembreController
-```php
-ajouterAthlete($data)            // Ajouter un athlète
-ajouterEntraineur($data)         // Ajouter un entraîneur
-ajouterStaff($data)              // Ajouter un staff
-getTousMembres()                 // Liste complète
-getMembreById($id)               // Détail d'un membre
-getTousAthletes()                // Tous les athlètes
-getTousEntraineurs()             // Tous les entraîneurs
-getTousStaff()                   // Tout le staff
-modifierMembre($id, $data)       // Mettre à jour
-supprimerMembre($id)             // Supprimer
-getProfilAthlete($id)            // Profil détaillé
-```
+## Notes
 
-### EntrainementController
-```php
-ajouter($data)                   // Créer un entraînement
-modifier($id, $data)             // Mettre à jour
-supprimer($id)                   // Supprimer
-getAll()                         // Tous les entraînements
-getById($id)                     // Détail
-getEntrainementsSemaine()        // De la semaine
-getByEntraineur($id)             // Par entraîneur
-getByEquipe($id)                 // Par équipe
-getByDate($date)                 // Par date
-getPlanning($mois, $annee)       // Calendrier mensuel
-getToutesEquipes()               // Toutes les équipes
-getTousEntraineurs()             // Tous les entraîneurs
-ajouterEquipe($data)             // Créer équipe
-```
-
-### PaiementController
-```php
-ajouter($data)                   // Enregistrer un paiement
-getAll()                         // Tous les paiements
-getByMembre($id)                 // Par membre
-getPaiementsAttente()            // En attente
-getTotalPaiements()              // Montant total
-getTotalParMethode()             // Par méthode
-getStatistiquessPaiements()      // Statistiques complètes
-```
-
-## Base de Données
-
-### Tables principales
-- `membre` - Base de tous les membres
-- `athlete` - Données spécifiques aux athlètes
-- `entraineur` - Données spécifiques aux entraîneurs
-- `staff` - Données du personnel administratif
-- `entrainement` - Sessions d'entraînement
-- `paiement` - Transactions de paiement
+- Les pages retournent des valeurs par défaut si la base est indisponible (pas de fatal error).
+- Pour servir uniquement `public/` comme racine via PHP intégré, utiliser `php -S localhost:8000 -t public` et ajuster les URLs si nécessaire.
 - `equipe` - Équipes/groupes
 - `competition` - Compétitions/matchs
 - `performance` - Statistiques de performance

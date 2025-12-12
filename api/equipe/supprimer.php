@@ -1,8 +1,8 @@
 <?php
 header('Content-Type: application/json');
 
-require_once '../../config/database.php';
-require_once '../../controllers/EquipeController.php';
+require_once __DIR__ . '/../../src/config/database.php';
+require_once __DIR__ . '/../../src/controllers/EquipeController.php';
 
 // Get JSON data
 $input = json_decode(file_get_contents('php://input'), true);
