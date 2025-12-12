@@ -2,49 +2,7 @@
 // Controllers are instantiated in index.php
 $equipes = $entrainementController->getToutesEquipes();
 $page_title = 'Ajouter un Membre';
-
-$error = '';
 $type_membre = isset($_GET['type']) ? $_GET['type'] : 'athlete';
-
-// Traiter l'ajout
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        'nom' => $_POST['nom'],
-        'prenom' => $_POST['prenom'],
-        'email' => $_POST['email'],
-        'telephone' => $_POST['telephone'],
-        'dateNaissance' => $_POST['dateNaissance'],
-        'categorie' => $_POST['categorie'],
-        'niveau' => $_POST['niveau']
-    ];
-
-    try {
-        if ($type_membre === 'athlete') {
-            $data['numeroLicence'] = $_POST['numeroLicence'];
-            $data['id_equipe'] = $_POST['id_equipe'] ?? null;
-            $data['taille'] = $_POST['taille'] ?? null;
-            $data['poids'] = $_POST['poids'] ?? null;
-            $data['position'] = $_POST['position'] ?? null;
-            $membreController->ajouterAthlete($data);
-        } elseif ($type_membre === 'entraineur') {
-            $data['specialite'] = $_POST['specialite'];
-            $data['diplome'] = $_POST['diplome'];
-            $data['annees_experience'] = $_POST['annees_experience'];
-            $data['id_equipe'] = $_POST['id_equipe'] ?? null;
-            $membreController->ajouterEntraineur($data);
-        } elseif ($type_membre === 'staff') {
-            $data['fonction'] = $_POST['fonction'];
-            $data['departement'] = $_POST['departement'];
-            $membreController->ajouterStaff($data);
-        }
-
-        $_SESSION['success'] = 'Membre ajouté avec succès!';
-        header('Location: index.php?page=membres');
-        exit();
-    } catch (Exception $e) {
-        $error = 'Erreur: ' . $e->getMessage();
-    }
-}
 ?>
 
 <div class="container">
@@ -70,8 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </a>
             </div>
 
-            <form method="POST" class="form">
-                <!-- Champs communs -->
+            <form id="membreForm" class="form">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nom">Nom *</label>
@@ -178,8 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="number" id="annees_experience" name="annees_experience" min="0" required>
                         </div>
                         <div class="form-group">
-                            <label for="id_equipe">Équipe</label>
-                            <select id="id_equipe" name="id_equipe">
+                            <label for="id_equipe_trainer">Équipe</label>
+                            <select id="id_equipe_trainer" name="id_equipe">
                                 <option value="">Aucune équipe</option>
                                 <?php foreach ($equipes as $equipe): ?>
                                 <option value="<?php echo $equipe['id_equipe']; ?>">

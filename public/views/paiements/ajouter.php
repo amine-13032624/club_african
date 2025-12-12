@@ -2,59 +2,24 @@
 // Controllers are instantiated in index.php
 $page_title = 'Ajouter un Paiement';
 
-$controller = new PaiementController();
-$membres = [];
-
 $database = new Database();
 $db = $database->getConnection();
-$query = "SELECT id_membre, CONCAT(prenom, ' ', nom) as nom FROM membre";
+$query = "SELECT id_membre, CONCAT(prenom, ' ', nom) as nom FROM membre ORDER BY nom";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $membres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$error = '';
-
-// Traiter l'ajout
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        'id_membre' => $_POST['id_membre'],
-        'montant' => $_POST['montant'],
-        'date_paiement' => $_POST['date_paiement'],
-        'methode_paiement' => $_POST['methode_paiement'],
-        'statut' => $_POST['statut'],
-        'description' => $_POST['description'] ?? ''
-    ];
-
-    try {
-        if ($controller->ajouter($data)) {
-            $_SESSION['success'] = 'Paiement ajouté avec succès!';
-            header('Location: liste.php');
-            exit();
-        } else {
-            $error = 'Erreur lors de l\'ajout du paiement';
-        }
-    } catch (Exception $e) {
-        $error = 'Erreur: ' . $e->getMessage();
-    }
-}
 ?>
 
 
 
 
 
-    <?php // header included in index.php; ?>
-    
     <div class="page-header">
-            <h1>Ajouter un Paiement</h1>
-        </div>
+        <h1>Ajouter un Paiement</h1>
+    </div>
 
-        <?php if ($error): ?>
-            <div class="alert alert-danger"><?php echo $error; ?></div>
-        <?php endif; ?>
-
-        <div class="form-container">
-            <form method="POST" class="form">
+    <div class="form-container">
+        <form id="paiementForm" class="form">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="id_membre">Membre *</label>
@@ -107,9 +72,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Ajouter</button>
-                    <a href="liste.php" class="btn btn-secondary">Annuler</a>
+                    <a href="index.php?page=paiements" class="btn btn-secondary">Annuler</a>
                 </div>
             </form>
         </div>
+    </div>
 
+<script>
+    document.getElementById('paiementForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            id_membre: document.getElementById('id_membre').value,
+            montant: parseFloat(document.getElementById('montant').value),
+            date_paiement: document.getElementById('date_paiement').value,
+            methode_paiement: document.getElementById('methode_paiement').value,
+            statut: document.getElementById('statut').value,
+            description: document.getElementById('description').value || null
+        };
 
+        try {
+            const response = await fetch('api/paiement/ajouter.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Paiement ajouté avec succès!');
+                window.location.href = 'index.php?page=paiements';
+            } else {
+                alert('Erreur: ' + result.message);
+            }
+        } catch (error) {
+            alert('Erreur lors de la création: ' + error.message);
+        }
+    });
+</script>

@@ -3,7 +3,7 @@
 $page_title = 'Modifier un Membre';
 
 if (!isset($_GET['id'])) {
-    header('Location: liste.php');
+    header('Location: index.php?page=membres&action=liste');
     exit();
 }
 
@@ -13,31 +13,8 @@ $member = $membreController->getMembreById($id);
 
 if (!$member) {
     $_SESSION['error'] = 'Membre non trouvé';
-    header('Location: liste.php');
+    header('Location: index.php?page=membres&action=liste');
     exit();
-}
-
-$error = '';
-
-// Traiter la modification
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        'nom' => $_POST['nom'],
-        'prenom' => $_POST['prenom'],
-        'email' => $_POST['email'],
-        'telephone' => $_POST['telephone'],
-        'dateNaissance' => $_POST['dateNaissance'],
-        'categorie' => $_POST['categorie'],
-        'niveau' => $_POST['niveau']
-    ];
-
-    if ($membreController->modifierMembre($id, $data)) {
-        $_SESSION['success'] = 'Membre modifié avec succès!';
-        header('Location: profil.php?id=' . $id);
-        exit();
-    } else {
-        $error = 'Erreur lors de la modification';
-    }
 }
 ?>
 
@@ -56,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <div class="form-container">
-            <form method="POST" class="form">
+            <form id="membreForm" class="form">
+                <input type="hidden" id="id" value="<?php echo intval($_GET['id']); ?>">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="nom">Nom *</label>
@@ -111,3 +89,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
 
+
+<script>
+    document.getElementById('membreForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = parseInt(document.getElementById('id').value);
+        const formData = {
+            id: id,
+            nom: document.getElementById('nom').value,
+            prenom: document.getElementById('prenom').value,
+            email: document.getElementById('email').value,
+            telephone: document.getElementById('telephone').value,
+            dateNaissance: document.getElementById('dateNaissance').value,
+            categorie: document.getElementById('categorie').value,
+            niveau: document.getElementById('niveau').value
+        };
+
+        try {
+            const response = await fetch('api/membre/modifier.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Membre modifié avec succès!');
+                window.location.href = 'index.php?page=membres&action=profil&id=' + id;
+            } else {
+                alert('Erreur: ' + result.message);
+            }
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    });
+</script>

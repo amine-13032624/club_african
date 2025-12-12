@@ -18,32 +18,6 @@ if (!$entrainement) {
     header('Location: index.php?page=entrainements&action=planning');
     exit();
 }
-
-$error = '';
-
-// Traiter la modification
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        'titre' => $_POST['titre'],
-        'description' => $_POST['description'],
-        'date_entrainement' => $_POST['date_entrainement'],
-        'heure_debut' => $_POST['heure_debut'],
-        'heure_fin' => $_POST['heure_fin'],
-        'lieu' => $_POST['lieu'],
-        'type' => $_POST['type'],
-        'niveau' => $_POST['niveau'],
-        'id_entraineur' => $_POST['id_entraineur'],
-        'id_equipe' => $_POST['id_equipe']
-    ];
-
-    if ($controller->modifier($id, $data)) {
-        $_SESSION['success'] = 'Entraînement modifié avec succès!';
-        header('Location: index.php?page=entrainements&action=planning');
-        exit();
-    } else {
-        $error = 'Erreur lors de la modification';
-    }
-}
 ?>
 
 
@@ -61,7 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <div class="form-container">
-            <form method="POST" class="form">
+            <form id="entrainementForm" class="form">
+                <input type="hidden" id="id" value="<?php echo intval($_GET['id']); ?>">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="titre">Titre *</label>
@@ -144,3 +119,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
 
+<script>
+    document.getElementById('entrainementForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const id = parseInt(document.getElementById('id').value);
+        const formData = {
+            id: id,
+            titre: document.getElementById('titre').value,
+            description: document.getElementById('description').value,
+            date_entrainement: document.getElementById('date_entrainement').value,
+            heure_debut: document.getElementById('heure_debut').value,
+            heure_fin: document.getElementById('heure_fin').value,
+            lieu: document.getElementById('lieu').value,
+            type: document.getElementById('type').value,
+            niveau: document.getElementById('niveau').value,
+            id_entraineur: parseInt(document.getElementById('id_entraineur').value),
+            id_equipe: parseInt(document.getElementById('id_equipe').value)
+        };
+
+        try {
+            const response = await fetch('api/entrainement/modifier.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Entraînement modifié avec succès!');
+                window.location.href = 'index.php?page=entrainements&action=planning';
+            } else {
+                alert('Erreur: ' + result.message);
+            }
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    });
+</script>

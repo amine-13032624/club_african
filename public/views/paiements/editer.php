@@ -3,12 +3,11 @@
 $page_title = 'Modifier un Paiement';
 
 if (!isset($_GET['id'])) {
-    header('Location: liste.php');
+    header('Location: index.php?page=paiements');
     exit();
 }
 
 $id = intval($_GET['id']);
-$controller = new PaiementController();
 
 $database = new Database();
 $db = $database->getConnection();
@@ -19,45 +18,15 @@ $paiement = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$paiement) {
     $_SESSION['error'] = 'Paiement non trouvé';
-    header('Location: liste.php');
+    header('Location: index.php?page=paiements');
     exit();
 }
 
-$query = "SELECT id_membre, CONCAT(prenom, ' ', nom) as nom FROM membre";
+$query = "SELECT id_membre, CONCAT(prenom, ' ', nom) as nom FROM membre ORDER BY nom";
 $stmt = $db->prepare($query);
 $stmt->execute();
 $membres = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$error = '';
-
-// Traiter la modification
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        'id_membre' => $_POST['id_membre'],
-        'montant' => $_POST['montant'],
-        'date_paiement' => $_POST['date_paiement'],
-        'methode_paiement' => $_POST['methode_paiement'],
-        'statut' => $_POST['statut'],
-        'description' => $_POST['description'] ?? ''
-    ];
-
-    $query = "UPDATE paiement SET 
-              id_membre = ?,
-              montant = ?,
-              date_paiement = ?,
-              methode_paiement = ?,
-              statut = ?,
-              description = ?
-              WHERE id_paiement = ?";
-    
-    $stmt = $db->prepare($query);
-    if ($stmt->execute([
-        $data['id_membre'],
-        $data['montant'],
-        $data['date_paiement'],
-        $data['methode_paiement'],
-        $data['statut'],
-        $data['description'],
+?>
         $id
     ])) {
         $_SESSION['success'] = 'Paiement modifié avec succès!';
@@ -84,7 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php endif; ?>
 
         <div class="form-container">
-            <form method="POST" class="form">
+            <form id="paiementForm" class="form">
+                <input type="hidden" id="id_paiement" value="<?php echo $paiement['id_paiement']; ?>">
                 <div class="form-row">
                     <div class="form-group">
                         <label for="id_membre">Membre *</label>
@@ -137,9 +107,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-actions">
                     <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    <a href="liste.php" class="btn btn-secondary">Annuler</a>
+                    <a href="index.php?page=paiements" class="btn btn-secondary">Annuler</a>
                 </div>
             </form>
         </div>
 
+<script>
+    document.getElementById('paiementForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const formData = {
+            id_membre: document.getElementById('id_membre').value,
+            montant: parseFloat(document.getElementById('montant').value),
+            date_paiement: document.getElementById('date_paiement').value,
+            methode_paiement: document.getElementById('methode_paiement').value,
+            statut: document.getElementById('statut').value,
+            description: document.getElementById('description').value || null
+        };
 
+        try {
+            const response = await fetch('api/paiement/modifier.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({...formData, id: <?php echo $paiement['id_paiement']; ?>})
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Paiement modifié avec succès!');
+                window.location.href = 'index.php?page=paiements';
+            } else {
+                alert('Erreur: ' + result.message);
+            }
+        } catch (error) {
+            alert('Erreur lors de la modification: ' + error.message);
+        }
+    });
+</script>

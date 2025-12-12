@@ -16,17 +16,6 @@ if (!$entrainement) {
     header('Location: index.php?page=entrainements&action=planning');
     exit();
 }
-
-// Traiter la suppression
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
-    if ($controller->supprimer($_GET['id'])) {
-        $_SESSION['success'] = 'Entraînement supprimé avec succès!';
-        header('Location: index.php?page=entrainements&action=planning');
-        exit();
-    } else {
-        $_SESSION['error'] = 'Erreur lors de la suppression';
-    }
-}
 ?>
 
 
@@ -53,15 +42,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['confirm'])) {
                 </p>
                 <p style="color: #e74c3c; font-weight: 600;">Cette action ne peut pas être annulée!</p>
 
-                <form method="POST" style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
-                    <button type="submit" name="confirm" value="1" class="btn btn-danger">
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                    <button id="deleteBtnConfirm" class="btn btn-danger">
                         <i class="fas fa-trash"></i> Supprimer
                     </button>
                     <a href="index.php?page=entrainements&action=planning" class="btn btn-secondary">
                         <i class="fas fa-times"></i> Annuler
                     </a>
-                </form>
+                </div>
+                <input type="hidden" id="id" value="<?php echo intval($_GET['id']); ?>">
             </div>
         </div>
 
 
+
+<script>
+    document.getElementById('deleteBtnConfirm').addEventListener('click', async () => {
+        if (!confirm('Êtes-vous vraiment sûr? Cette action ne peut pas être annulée!')) {
+            return;
+        }
+        
+        const id = parseInt(document.getElementById('id').value);
+        
+        try {
+            const response = await fetch('api/entrainement/supprimer.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                alert('Entraînement supprimé avec succès!');
+                window.location.href = 'index.php?page=entrainements&action=planning';
+            } else {
+                alert('Erreur: ' + result.message);
+            }
+        } catch (error) {
+            alert('Erreur: ' + error.message);
+        }
+    });
+</script>
